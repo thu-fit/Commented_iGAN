@@ -206,11 +206,15 @@ def disc_test(_x, _params, _batchnorm, n_layers=3):
 def gen_test(_z, _params, _batchnorm, n_layers=3, n_f=128, init_sz=4, nc=3, use_tanh=False):
     if use_tanh:
         _z= tanh(_z)
+    # gw0 : weight of dense layer(0)
+    # gg0 , gb0 : params of batchnorm layer
     [gw0, gg0, gb0] = _params[0:3]
     hs = []
     u = _batchnorm[0]
     s = _batchnorm[n_layers + 1]
+    # Clip z => Dense => BatchNorm => ReLU
     h0 = relu(batchnorm(T.dot(T.clip(_z, -1.0, 1.0), gw0), u=u, s=s, g=gg0, b=gb0))
+    # reshape to 4D
     h1 = h0.reshape((h0.shape[0], n_f * 2 ** n_layers, init_sz, init_sz))
     hs.extend([h0, h1])
     for n in range(n_layers):

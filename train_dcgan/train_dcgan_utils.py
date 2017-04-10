@@ -13,7 +13,6 @@ from lib.rng import np_rng
 import numpy as np
 
 
-
 relu = activations.Rectify()
 sigmoid = activations.Sigmoid()
 lrelu = activations.LeakyRectify()
